@@ -97,15 +97,23 @@ export function ArticleList({
               value && setViewMode(value as "card" | "table")
             }
           >
-            <ToggleGroupItem value="card" aria-label="卡片视图">
+            <ToggleGroupItem
+              className="cursor-pointer"
+              value="card"
+              aria-label="卡片视图"
+            >
               <LayoutList className="h-4 w-4" />
             </ToggleGroupItem>
-            <ToggleGroupItem value="table" aria-label="表格视图">
+            <ToggleGroupItem
+              className="cursor-pointer"
+              value="table"
+              aria-label="表格视图"
+            >
               <TableIcon className="h-4 w-4" />
             </ToggleGroupItem>
           </ToggleGroup>
           <Link href="/admin/articles/new">
-            <Button className="bg-primary hover:bg-primary/90">
+            <Button className="bg-primary hover:bg-primary/90 cursor-pointer">
               <PlusCircle className="mr-2 h-4 w-4" />
               新建文章
             </Button>
@@ -118,7 +126,7 @@ export function ArticleList({
         <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg bg-muted/10">
           <p className="mb-4 text-muted-foreground">暂无文章</p>
           <Link href="/admin/articles/new">
-            <Button className="bg-primary hover:bg-primary/90">
+            <Button className="bg-primary hover:bg-primary/90 cursor-pointer">
               <PlusCircle className="mr-2 h-4 w-4" />
               创建第一篇文章
             </Button>
@@ -156,12 +164,17 @@ export function ArticleList({
                 <Button
                   variant="ghost"
                   size="sm"
+                  className="cursor-pointer"
                   onClick={() => handleView(article.id)}
                 >
                   <Eye className="h-4 w-4" />
                 </Button>
                 <Link href={`/admin/articles/edit?id=${article.id}`}>
-                  <Button variant="outline" size="sm">
+                  <Button
+                    variant="outline"
+                    className="cursor-pointer"
+                    size="sm"
+                  >
                     <Pencil className="h-4 w-4" />
                   </Button>
                 </Link>
@@ -170,7 +183,7 @@ export function ArticleList({
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 cursor-pointer"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -239,12 +252,17 @@ export function ArticleList({
                       <Button
                         variant="ghost"
                         size="sm"
+                        className="cursor-pointer"
                         onClick={() => handleView(article.id)}
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Link href={`/admin/articles/edit?id=${article.id}`}>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="cursor-pointer"
+                        >
                           <Pencil className="h-4 w-4" />
                         </Button>
                       </Link>
@@ -253,7 +271,7 @@ export function ArticleList({
                           <Button
                             variant="outline"
                             size="sm"
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 cursor-pointer"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

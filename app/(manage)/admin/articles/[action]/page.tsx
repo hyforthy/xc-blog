@@ -383,7 +383,7 @@ export default function ArticleEditor({
                 isMobile && !isUploadExpanded
                   ? "h-0 overflow-hidden opacity-0"
                   : "opacity-100"
-              } ${isUploadExpanded ? "mt-4" : "mt-0"}`}
+              } ${!isMobile || isUploadExpanded ? "mt-4" : "mt-0"}`}
             >
               <Upload
                 onUpload={handleImageUpload}

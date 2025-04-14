@@ -1,27 +1,38 @@
-import fs from 'fs';
-import path from 'path';
+import db from './db';
 
-const categoriesPath = path.join(process.cwd(), 'content/categories.json');
-const tagsPath = path.join(process.cwd(), 'content/tags.json');
-
-// 获取分类数据
-export async function getCategories(): Promise<Record<string, string>> {
-  try {
-    if (!fs.existsSync(categoriesPath)) return {};
-    const content = fs.readFileSync(categoriesPath, 'utf8');
-    return JSON.parse(content);
-  } catch {
-    return {};
-  }
+interface Category {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
 }
 
-// 获取标签数据
-export async function getTags(): Promise<Record<string, string>> {
-  try {
-    if (!fs.existsSync(tagsPath)) return {};
-    const content = fs.readFileSync(tagsPath, 'utf8');
-    return JSON.parse(content);
-  } catch {
-    return {};
-  }
+export function getCategories() {
+  const categories = db.prepare('SELECT * FROM categories ORDER BY updated_at').all() as Category[];
+  
+  return categories.reduce((acc, category) => {
+    acc[category.id] = category.name;
+    return acc;
+  }, {} as Record<string, string>);
 }
+
+interface Tag {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export function getTags() {
+  const tags = db.prepare('SELECT * FROM tags ORDER BY updated_at').all() as Tag[];
+  
+  return tags.reduce((acc, tag) => {
+    acc[tag.id] = tag.name;
+    return acc;
+  }, {} as Record<string, string>);
+}
+
+
+
+
+

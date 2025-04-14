@@ -12,7 +12,7 @@ export default async function AdminArticlesPage({
   const viewId = Array.isArray(params.view) ? params.view[0] : params.view;
 
   const page = Number(pageParam) || 1;
-  const { articles, totalItems } = await getArticles(page);
+  const { articles, totalItems } = getArticles(page);
 
   return (
     <div>

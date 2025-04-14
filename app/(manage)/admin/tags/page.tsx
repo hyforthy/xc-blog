@@ -1,16 +1,9 @@
 import { TagManager } from "@/components/admin/TagManager";
-import fs from 'fs';
-import path from 'path';
+import { getTags } from "@/lib/categories-tags";
 
-async function getTags() {
-  const filePath = path.join(process.cwd(), 'content', 'tags.json');
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(fileContents);
-}
+export default function TagPage() {
+  const tags = getTags();
 
-export default async function TagPage() {
-  const tags = await getTags();
-  
   return (
     <div>
       <TagManager initialTags={tags} />

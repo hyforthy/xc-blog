@@ -35,9 +35,19 @@ export default function ArticleList({
             <hr className="border-t border-gray-200 dark:border-gray-800 my-8" />
           )}
           <article className="space-y-4">
-            <h2 className="text-primary dark:text-primary-dark font-bold text-lg md:text-xl leading-tight transition-colors">
-              {article.title}
-            </h2>
+            <div className="space-y-2">
+              <h2 className="text-primary dark:text-primary-dark font-bold text-lg md:text-xl leading-tight transition-colors">
+                {article.title}
+              </h2>
+              {/* 添加分类信息显示 */}
+              {article.category && (
+                <div className="text-sm">
+                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-md">
+                    {article.category}
+                  </span>
+                </div>
+              )}
+            </div>
             <p className="text-base leading-relaxed text-primary dark:text-primary-dark line-clamp-3">
               {article.summary}
             </p>

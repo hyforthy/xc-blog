@@ -1,16 +1,9 @@
 import { CategoryManager } from "@/components/admin/CategoryManager";
-import fs from 'fs';
-import path from 'path';
-
-async function getCategories() {
-  const filePath = path.join(process.cwd(), 'content', 'categories.json');
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(fileContents);
-}
+import { getCategories } from "@/lib/categories-tags";
 
 export default async function CategoryPage() {
-  const categories = await getCategories();
-  
+  const categories = getCategories();
+
   return (
     <div>
       <CategoryManager initialCategories={categories} />

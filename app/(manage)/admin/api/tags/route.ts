@@ -1,17 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import { randomUUID } from 'crypto';
 import { authRequest } from '@/lib/auth';
+import { randomUUID } from 'crypto';
+import db from '@/lib/db';
+
+interface Tag {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export async function GET(request: NextRequest) {
   const isAuth = await authRequest(request);
   if (!isAuth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
-    const filePath = path.join(process.cwd(), 'content', 'tags.json');
-    const tags = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    return NextResponse.json(tags);
+    const tags = db.prepare('SELECT * FROM tags ORDER BY updated_at').all() as Tag[];
+    
+    // 转换为 {id: name} 格式
+    const tagMap = tags.reduce((acc, tag) => {
+      acc[tag.id] = tag.name;
+      return acc;
+    }, {} as Record<string, string>);
+    
+    return NextResponse.json(tagMap);
   } catch {
     return NextResponse.json(
       { error: '获取标签失败' },
@@ -26,29 +38,44 @@ export async function POST(request: NextRequest) {
 
   try {
     const { operation, data } = await request.json();
-    const filePath = path.join(process.cwd(), 'content', 'tags.json');
-    
-    // 读取现有标签
-    const tags = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const now = new Date().toISOString();
 
     if (operation === 'update') {
-      if (!tags[data.id]) {
-        return NextResponse.json({ error: '标签ID不存在' }, { status: 400 });
-      }
-      tags[data.id] = data.name;
+      // 更新标签
+      db.prepare(`
+        UPDATE tags 
+        SET name = ?, updated_at = ?
+        WHERE id = ?
+      `).run(data.name, now, data.id);
+      
+      return NextResponse.json({ success: true });
     } else if (operation === 'create') {
-      if (Object.values(tags).includes(data.name)) {
-        return NextResponse.json({ error: '标签名称已存在' }, { status: 400 });
+      // 检查标签名是否已存在
+      const exists = db.prepare(`
+        SELECT 1 FROM tags WHERE name = ?
+      `).get(data.name);
+      
+      if (exists) {
+        return NextResponse.json(
+          { error: '标签名称已存在' },
+          { status: 400 }
+        );
       }
-      const newId = randomUUID().replace(/-/g, '').substring(0, 12);
-      tags[newId] = data.name;
-      fs.writeFileSync(filePath, JSON.stringify(tags, null, 2));
+
+      const newId = "tag-" + randomUUID().replace(/-/g, '').substring(0, 12);
+      db.prepare(`
+        INSERT INTO tags (id, name, created_at, updated_at)
+        VALUES (?, ?, ?, ?)
+      `).run(newId, data.name, now, now);
+      
       return NextResponse.json({ success: true, newId });
     }
     
-    fs.writeFileSync(filePath, JSON.stringify(tags, null, 2));
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ error: '非法操作' }, { status: 400 });
   } catch {
-    return NextResponse.json({ error: '保存标签失败' }, { status: 500 });
+    return NextResponse.json(
+      { error: '保存标签失败' },
+      { status: 500 }
+    );
   }
 }

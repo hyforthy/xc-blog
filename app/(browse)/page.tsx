@@ -12,7 +12,7 @@ export default async function Home({
 
   const page = Number(pageParam) || 1;
 
-  const { articles, totalItems } = await getArticles(page, params.category);
+  const { articles, totalItems } = getArticles(page, params.category);
 
   return (
     <div>

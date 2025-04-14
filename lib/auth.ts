@@ -8,7 +8,7 @@ const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'Uiisdsfasdfsa
 export async function signJWT(payload: Record<string, string>) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime('1h')
+    .setExpirationTime('15m')
     .sign(SECRET);
 }
 

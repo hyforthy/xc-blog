@@ -69,21 +69,14 @@ export function ArticleViewer({ articleId }: { articleId: string }) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 not-prose">
           <span>{formatDate(article.updatedAt)}</span>
           {article.category && (
-            <Badge
-              variant="secondary"
-              className="text-xs bg-neutral-200 dark:bg-neutral-800"
-            >
-              {article.category}
-            </Badge>
+            <Badge variant="outline">{article.category}</Badge>
           )}
-          <div>|</div>
+          <div>·</div>
           {article.tags && article.tags.length > 0 && (
             <span className="flex gap-1">
-              {article.tags.map((tag, index) => (
-                <Badge key={`tag-${index}`} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
+              {typeof article.tags === "string"
+                ? article.tags
+                : article.tags.join(", ")}
             </span>
           )}
         </div>
