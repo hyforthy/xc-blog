@@ -110,7 +110,7 @@ export default function ArticleEditor({
     formState: { errors },
     setValue,
     watch,
-  } = useForm({
+  } = useForm<FormData>({
     defaultValues: async () => {
       if (isNew) return { title: "", category: "", tags: [] };
 
@@ -143,6 +143,31 @@ export default function ArticleEditor({
         }
       }
       return { title: "", category: "", tags: [] };
+    },
+    mode: "onChange", // 添加表单验证模式
+    resolver: async (values) => {
+      const errors: Record<string, { type: string; message: string }> = {};
+
+      // 验证标题
+      if (!values.title) {
+        errors.title = {
+          type: "required",
+          message: "标题不能为空",
+        };
+      }
+
+      // 验证分类
+      if (!values.category) {
+        errors.category = {
+          type: "required",
+          message: "分类不能为空",
+        };
+      }
+
+      return {
+        values,
+        errors,
+      };
     },
   });
 
@@ -293,7 +318,7 @@ export default function ArticleEditor({
                           key={id}
                           value={name}
                           onSelect={() => {
-                            setValue("category", id);
+                            setValue("category", id, { shouldValidate: true });
                           }}
                           className="pl-4"
                         >
@@ -313,7 +338,7 @@ export default function ArticleEditor({
                 </PopoverContent>
               </Popover>
               {errors.category && (
-                <p className="text-red-500 text-sm mt-1">请选择分类</p>
+                <p className="text-red-500 text-sm mt-1">分类不能为空</p>
               )}
             </div>
 

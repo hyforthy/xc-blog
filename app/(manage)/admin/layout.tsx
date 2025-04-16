@@ -27,8 +27,10 @@ export default function AdminLayout({
     const checkAuth = async () => {
       const isAuthenticated = await verifyToken();
       if (!isAuthenticated && pathname !== "/admin/login") {
-        router.push(`/admin/login?from=${encodeURIComponent(pathname)}`);
-        return; // 立即返回，不设置authChecked
+        // 获取完整路径包括查询参数
+        const fullPath = window.location.pathname + window.location.search;
+        router.push(`/admin/login?from=${encodeURIComponent(fullPath)}`);
+        return;
       }
       setAuthChecked(true);
     };
