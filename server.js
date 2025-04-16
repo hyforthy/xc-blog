@@ -1,10 +1,10 @@
-import next from 'next';
-import { createServer } from 'http';
+const next = require('next');
+const { createServer } = require('http');
 
 // 解析命令行参数
 function parseArgs() {
   const args = process.argv.slice(2);
-  const result: { host?: string; port?: number } = {};
+  const result = { host: 'localhost', port: 3000 };
   
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--host' && args[i+1]) {
@@ -18,13 +18,13 @@ function parseArgs() {
   return result;
 }
 
-const { host = 'localhost', port = 3000 } = parseArgs();
+const { host, port } = parseArgs();
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-// 打印环境变量和参数
+// 打印启动配置
 console.log('服务启动配置:', {
   NODE_ENV: process.env.NODE_ENV,
   主机地址: host,
