@@ -4,7 +4,9 @@ simple personal blog
 
 ## 预先准备
 
-安装 nodejs 20 或 20+。
+- 拉取代码： `git clone https://github.com/hyforthy/xc-blog.git`。
+
+- 安装 nodejs 20 或 20+。
 
 ## 开发
 
