@@ -48,7 +48,7 @@ node scripts/init-db.mjs -u <username> -p <passwd>
 pnpm build
 ```
 
-### 2. 运行
+### 4. 运行
 
 - 常规运行（终端窗口关闭，服务也会关闭）
 
