@@ -34,6 +34,12 @@ export function Upload({ onUpload, accept, maxSize }: UploadProps) {
     setError(null);
     setUploadedUrl(null);
 
+    // Strict image type check
+    if (!file.type.startsWith("image/")) {
+      setError("请上传图片文件");
+      return;
+    }
+
     // Check file size
     if (maxSize && file.size > maxSize) {
       setError(`文件大小不能超过 ${(maxSize / 1024 / 1024).toFixed(1)}MB`);

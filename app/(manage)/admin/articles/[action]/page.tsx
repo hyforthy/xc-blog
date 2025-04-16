@@ -26,6 +26,8 @@ import { cn } from "@/lib/utils";
 import { Upload } from "@/components/ui/upload";
 import { useTheme } from "../../theme-context";
 
+import imageCompression from "browser-image-compression";
+
 interface FormData {
   title: string;
   category: string;
@@ -204,10 +206,23 @@ export default function ArticleEditor({
 
   // 图片上传处理函数
   const handleImageUpload = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
+      // 压缩选项 - 保持高质量的同时减小文件大小
+      const options = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1920, // 限制最大边长
+        useWebWorker: true,
+        alwaysKeepResolution: true, // 保持比例
+        fileType: "image/webp",
+        initialQuality: 0.8,
+      };
+
+      // 执行压缩
+      const compressedFile = await imageCompression(file, options);
+
+      const formData = new FormData();
+      formData.append("file", compressedFile, file.name); // 保留原始文件名
+
       const response = await fetch("/admin/api/upload", {
         method: "POST",
         body: formData,
@@ -388,7 +403,7 @@ export default function ArticleEditor({
               <Upload
                 onUpload={handleImageUpload}
                 accept="image/*"
-                maxSize={5 * 1024 * 1024} // 5MB
+                maxSize={10 * 1024 * 1024} // 5MB
               />
             </div>
           </div>
