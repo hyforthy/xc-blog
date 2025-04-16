@@ -10,8 +10,6 @@ simple personal blog
 
 ## 开发
 
-环境NODE_ENV改为development，在根目录下 `.env.local` 内。
-
 ```shell
 pnpm install
 node scripts/init-db.mjs
@@ -28,7 +26,7 @@ pnpm run dev -- -H  0.0.0.0 -p  3001
 
 ## 部署
 
-重设JWT_SECRET密钥，在根目录下 `.env.local` 内。
+重设JWT_SECRET密钥，在根目录下 `.env.production` 内。
 
 ### 初始化
 
@@ -63,15 +61,16 @@ pnpm build
     2. 启动
 
         ```shell
-        pm2 start "pnpm start" --name "xc-blog-app"
-        pm2 save
-        pm2 startup
+        pm2 start "pnpm start" --name "xc-blog-app" # 启动应用
+        pm2 save  # 保存进程列表到磁盘
+        pm2 startup # 配置开机自启动
         ```
 
-        也可通过pm2重启、关闭、查看应用
+        也可通过pm2重启、关闭、查看等来管理应用
 
         ```shell
+        pm2 logs xc-blog-app
         pm2 restart xc-blog-app
         pm2 stop xc-blog-app
-        pm2 logs xc-blog-app
+        pm2 delete xc-blog-app
         ```

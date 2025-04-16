@@ -1,5 +1,6 @@
 const next = require('next');
 const { createServer } = require('http');
+require('dotenv').config({ path: '.env.production' });
 
 // 解析命令行参数
 function parseArgs() {
