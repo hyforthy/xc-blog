@@ -10,6 +10,8 @@ simple personal blog
 
 ## 开发
 
+环境NODE_ENV改为development，在根目录下 `.env.local` 内。
+
 ```shell
 pnpm install
 node scripts/init-db.mjs
@@ -28,19 +30,19 @@ pnpm run dev -- -H  0.0.0.0 -p  3001
 
 重设JWT_SECRET密钥，在根目录下 `.env.local` 内。
 
-### 1. 构建
-
-```shell
-pnpm install
-pnpm build
-```
-
-## 初始化
+### 初始化
 
 初始化数据库，设置管理员用户名和密码，`<username>`和`<passwd>`替换为自己的用户名和密码。
 
 ```shell
 node scripts/init-db.mjs -u <username> -p <passwd>
+```
+
+### 1. 构建
+
+```shell
+pnpm install
+pnpm build
 ```
 
 ### 2. 运行
