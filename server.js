@@ -28,8 +28,10 @@ const handle = app.getRequestHandler();
 // 打印启动配置
 console.log('服务启动配置:', {
   NODE_ENV: process.env.NODE_ENV,
-  主机地址: host,
-  端口号: port
+  JWT_SECRET: process.env.JWT_SECRET,
+  dev: dev,
+  host: host,
+  port: port
 });
 
 app.prepare().then(() => {

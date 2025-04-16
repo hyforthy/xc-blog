@@ -28,7 +28,13 @@ pnpm run dev -- -H  0.0.0.0 -p  3001
 
 重设JWT_SECRET密钥，在根目录下 `.env.production` 内。
 
-### 初始化
+### 1. 安装依赖
+
+```shell
+pnpm install
+```
+
+### 2. 初始化
 
 初始化数据库，设置管理员用户名和密码，`<username>`和`<passwd>`替换为自己的用户名和密码。
 
@@ -36,10 +42,9 @@ pnpm run dev -- -H  0.0.0.0 -p  3001
 node scripts/init-db.mjs -u <username> -p <passwd>
 ```
 
-### 1. 构建
+### 3. 构建
 
 ```shell
-pnpm install
 pnpm build
 ```
 
