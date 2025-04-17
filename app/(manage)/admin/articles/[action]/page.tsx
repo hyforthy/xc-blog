@@ -456,15 +456,13 @@ export default function ArticleEditor({
                   [rehypeRaw, { passThrough: ["ul", "ol", "li"] }],
                 ],
                 components: {
-                  ul: ({ node, ...props }) => (
+                  ul: ({ ...props }) => (
                     <ul className="list-disc pl-6 my-2" {...props} />
                   ),
-                  ol: ({ node, ...props }) => (
+                  ol: ({ ...props }) => (
                     <ol className="list-decimal pl-6 my-2" {...props} />
                   ),
-                  li: ({ node, ...props }) => (
-                    <li className="my-1" {...props} />
-                  ),
+                  li: ({ ...props }) => <li className="my-1" {...props} />,
                 },
               }}
             />
