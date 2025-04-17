@@ -7,6 +7,12 @@ simple personal blog
 - 拉取代码： `git clone https://github.com/hyforthy/xc-blog.git`。
 
 - 安装 nodejs 20 或 20+。
+  
+  安装完node后，安装pnpm
+
+  ```shell
+  npm install pnpm -g
+  ```
 
 ## 开发
 
