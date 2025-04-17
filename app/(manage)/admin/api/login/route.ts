@@ -3,6 +3,7 @@ import { signJWT } from '@/lib/auth';
 import { z } from 'zod'; // 使用 zod 进行输入验证
 import db from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { limiter } from '@/lib/rate-limit';
 // 定义请求体的 schema
 const loginSchema = z.object({
   username: z.string().min(1, '用户名不能为空'),
@@ -25,46 +26,55 @@ function updateTokenCookie(response: NextResponse, token: string) {
 }
 
 // 修改验证用户函数
-const validateUser = async (username: string, password: string): Promise<boolean> => {
+const validateUser = async (username: string, password: string): Promise<{ valid: boolean; error?: string }> => {
   try {
-    // 从数据库查询用户
+    // 检查尝试次数
+    const { success, remaining, remainingMinutes } = limiter.check(5, username);
+    if (!success) {
+      return { 
+        valid: false, 
+        error: `尝试次数过多，请${remainingMinutes}分钟后再试` 
+      };
+    }
+
     const user = db.prepare(`
       SELECT password_hash FROM users 
       WHERE username = ?
     `).get(username) as { password_hash: string } | undefined;
 
-    if (!user) return false;
+    if (!user) {
+      return { 
+        valid: false, 
+        error: `无效的用户名或密码，剩余尝试次数: ${remaining}次` 
+      };
+    }
 
-    // 验证密码哈希
-    return await bcrypt.compare(password, user.password_hash);
+    const isValid = await bcrypt.compare(password, user.password_hash);
+    if (!isValid) {
+      return { 
+        valid: false, 
+        error: `无效的用户名或密码，剩余尝试次数: ${remaining}次` 
+      };
+    }
+
+    return { valid: true };
   } catch (error) {
     console.error('验证用户失败:', error);
-    return false;
+    return { valid: false, error: '登录失败，请稍后再试' };
   }
 };
 
-// 在POST函数中修改调用方式
+// 修改POST函数
 export async function POST(request: Request) {
   try {
-    // 解析并验证请求体
     const body = await request.json();
     const { username, password } = loginSchema.parse(body);
 
-    // 验证用户凭证
-    // 修改为异步验证
-    const isValid = await validateUser(username, password);
-    if (!isValid) {
+    const { valid, error } = await validateUser(username, password);
+    if (!valid) {
       return NextResponse.json(
-        { error: '无效的用户名或密码' },
-        {
-          status: 401,
-          headers: {
-            'Content-Security-Policy': "default-src 'self'",
-            'X-Content-Type-Options': 'nosniff',
-            'X-Frame-Options': 'DENY',
-            'X-XSS-Protection': '1; mode=block',
-          },
-        }
+        { error: error || '无效的用户名或密码' },
+        { status: 401}
       );
     }
 
