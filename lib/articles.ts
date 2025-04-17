@@ -4,6 +4,8 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import { randomUUID } from 'crypto';
 import { generateMarkdownSummary } from '@/lib/utils'
+import gfm from 'remark-gfm';
+import breaks from 'remark-breaks';
 
 
 export function getArticles(page = 1, categoryId?: string, tagId?: string) {
@@ -101,8 +103,10 @@ export async function getArticleForRead(id: string) {
   
   // 转换markdown为HTML
   const processedContent = await remark()
-  .use(html)
-  .process(article.content);
+    .use(gfm)
+    .use(breaks) // 支持换行符转换
+    .use(html)
+    .process(article.content);
   const contentHtml = processedContent.toString();
 
   return {

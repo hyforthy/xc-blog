@@ -28,6 +28,8 @@ import { useTheme } from "../../theme-context";
 
 import imageCompression from "browser-image-compression";
 
+import rehypeRaw from "rehype-raw";
+
 interface FormData {
   title: string;
   category: string;
@@ -448,6 +450,22 @@ export default function ArticleEditor({
               textareaProps={{
                 id: "content",
                 disabled: isLoading,
+              }}
+              previewOptions={{
+                rehypePlugins: [
+                  [rehypeRaw, { passThrough: ["ul", "ol", "li"] }],
+                ],
+                components: {
+                  ul: ({ node, ...props }) => (
+                    <ul className="list-disc pl-6 my-2" {...props} />
+                  ),
+                  ol: ({ node, ...props }) => (
+                    <ol className="list-decimal pl-6 my-2" {...props} />
+                  ),
+                  li: ({ node, ...props }) => (
+                    <li className="my-1" {...props} />
+                  ),
+                },
               }}
             />
           </div>
