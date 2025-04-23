@@ -21,7 +21,7 @@ function updateTokenCookie(response: NextResponse, token: string) {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     path: '/',
-    maxAge: 900, // 15分钟有效期
+    maxAge: 86400, // 24小时有效期
   });
 }
 

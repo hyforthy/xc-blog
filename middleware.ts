@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict',
           path: '/',
-          maxAge: 3600,
+          maxAge: 86400, // 24小时有效期
         });
         
         // 更新内存缓存
