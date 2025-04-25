@@ -4,8 +4,11 @@ import {
   getCategoryCount,
   getTagCount,
 } from "@/lib/admin-stats";
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function AdminHomePage() {
+  // 禁用缓存
+  noStore();
   // 直接获取统计数据
   const [articles, categories, tags] = await Promise.all([
     getArticleCount(),
