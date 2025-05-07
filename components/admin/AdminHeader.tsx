@@ -102,7 +102,7 @@ export default function AdminHeader({ theme, setTheme }: HeaderProps) {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className="flex items-center p-3 rounded-lg hover:bg-[#E0E0E0] dark:hover:bg-[#3A3A3A] transition-colors duration-200"
+                  className="flex items-center p-3 rounded-lg hover:bg-[#E0E0E0] dark:hover:bg-[#3A3A3A] transition-colors duration-200 select-none"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <FontAwesomeIcon

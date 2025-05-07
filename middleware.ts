@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifyJWT, signJWT } from '@/lib/auth';
+import { verifyJWT, signJWT, authRequest } from '@/lib/auth';
 import type { NextRequest } from 'next/server';
 
 // 内存缓存记录更新时间
@@ -9,8 +9,19 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   
   // 只处理/admin路径下的请求，但排除/admin/login
-  if (!pathname.startsWith('/admin') || pathname.startsWith('/admin/login')) {
+  if (!pathname.startsWith('/admin') || pathname.startsWith('/admin/login') || pathname.startsWith('/admin/api/login')) {
     return NextResponse.next();
+  }
+
+  // 验证 token
+  const isAuthenticated = await authRequest(request)
+    
+  if (!isAuthenticated) {
+    // 获取完整的当前URL
+    const from = request.nextUrl.pathname + request.nextUrl.search
+    // 重定向到登录页面，并带上来源页面信息
+    const loginUrl = new URL(`/admin/login?from=${encodeURIComponent(from)}`, request.url)
+    return NextResponse.redirect(loginUrl)
   }
 
   const token = request.cookies.get('token')?.value;

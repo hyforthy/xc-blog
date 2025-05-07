@@ -42,12 +42,16 @@ interface ArticleListProps {
   articles: Article[];
   currentPage: number;
   totalItems: number;
+  categoryName?: string;
+  tagName?: string;
 }
 
 export function ArticleList({
   articles,
   currentPage,
   totalItems,
+  categoryName,
+  tagName,
 }: ArticleListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -88,7 +92,26 @@ export function ArticleList({
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">文章列表</h2>
+        <div className="space-y-2">
+          <h2 className="text-2xl font-bold select-none">文章列表</h2>
+          <div className="text-sm text-muted-foreground flex items-center gap-2 select-none">
+            <span>
+              {categoryName ? (
+                <>
+                  分类：
+                  {categoryName}
+                </>
+              ) : tagName ? (
+                <>
+                  标签：
+                  {tagName}
+                </>
+              ) : (
+                "全部"
+              )}
+            </span>
+          </div>
+        </div>
         <div className="flex items-center gap-4">
           <ToggleGroup
             type="single"
@@ -113,7 +136,7 @@ export function ArticleList({
             </ToggleGroupItem>
           </ToggleGroup>
           <Link href="/admin/articles/new">
-            <Button className="bg-primary hover:bg-primary/90 cursor-pointer">
+            <Button className="bg-primary hover:bg-primary/90 select-none cursor-pointer">
               <PlusCircle className="mr-2 h-4 w-4" />
               新建文章
             </Button>
@@ -123,7 +146,7 @@ export function ArticleList({
 
       {/* 文章列表内容 */}
       {articles.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg bg-muted/10">
+        <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg bg-muted/10 select-none">
           <p className="mb-4 text-muted-foreground">暂无文章</p>
           <Link href="/admin/articles/new">
             <Button className="bg-primary hover:bg-primary/90 cursor-pointer">

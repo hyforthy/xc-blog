@@ -1,5 +1,6 @@
 import { getArticleForRead } from "@/lib/articles";
 import { formatDate } from "@/lib/utils";
+import Link from "next/link";
 
 export default async function ArticlePage({
   params,
@@ -24,12 +25,18 @@ export default async function ArticlePage({
           {article.title}
         </h1>
 
-        {/* 分类信息 */}
+        {/* 分类信息 - 添加链接 */}
         {article.category && (
           <div className="text-center text-sm">
-            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-md">
-              {article.category}
-            </span>
+            <Link
+              href={`/?categoryId=${encodeURIComponent(
+                article.categoryId || ""
+              )}`}
+            >
+              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 cursor-pointer inline-block">
+                {article.category}
+              </span>
+            </Link>
           </div>
         )}
       </div>
@@ -40,16 +47,20 @@ export default async function ArticlePage({
         dangerouslySetInnerHTML={{ __html: article.content || "" }}
       />
 
-      {/* 标签和发布时间 */}
+      {/* 标签和发布时间 - 添加链接 */}
       <div className="mt-8 text-sm text-secondary dark:text-secondary-dark">
         <div className="space-x-2 mb-3 flex justify-end">
-          {article.tags?.map((tag) => (
-            <span
+          {article.tags?.map((tag, index) => (
+            <Link
               key={tag}
-              className="px-2 py-1 bg-neutral-200 dark:bg-neutral-800 rounded text-xs"
+              href={`/?tagId=${encodeURIComponent(
+                article.tagsId?.[index] || ""
+              )}`}
             >
-              {tag}
-            </span>
+              <span className="px-2 py-1 bg-neutral-200 dark:bg-neutral-800 rounded text-xs hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer inline-block">
+                {tag}
+              </span>
+            </Link>
           ))}
         </div>
         <div className="flex justify-end mt-4 items-center">

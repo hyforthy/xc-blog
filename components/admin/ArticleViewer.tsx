@@ -57,7 +57,7 @@ export function ArticleViewer({ articleId }: { articleId: string }) {
       <Button
         variant="outline"
         onClick={handleBack}
-        className="h-8 has-[>svg]:pl-1 gap-1"
+        className="h-8 has-[>svg]:pl-1 gap-1 select-none cursor-pointer"
       >
         <ChevronLeft className="h-3 w-3" />
         返回列表

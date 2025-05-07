@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface CategoryManagerProps {
   initialCategories: Record<string, string>;
@@ -81,12 +82,13 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 select-none">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">分类管理</h2>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button
+              className="cursor-pointer"
               size="sm"
               onClick={() => {
                 setCurrentCategory(null);
@@ -145,7 +147,12 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
               key={id}
               className="flex items-center justify-between px-3 py-2 dark:shadow-gray-700 shadow-sm rounded-lg"
             >
-              <span>{name}</span>
+              <Link
+                href={`/admin/articles/?category=${encodeURIComponent(id)}`}
+                className="hover:text-blue-600 dark:hover:text-blue-400"
+              >
+                {name}
+              </Link>
               <Button
                 variant="ghost"
                 size="sm"

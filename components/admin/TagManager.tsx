@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface TagManagerProps {
   initialTags: Record<string, string>;
@@ -79,12 +80,13 @@ export function TagManager({ initialTags }: TagManagerProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 select-none">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold">标签管理</h2>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button
+              className="cursor-pointer"
               size="sm"
               onClick={() => {
                 setCurrentTag(null);
@@ -141,7 +143,12 @@ export function TagManager({ initialTags }: TagManagerProps) {
               key={id}
               className="flex items-center justify-between px-3 py-2 dark:shadow-gray-700 shadow-sm rounded-lg"
             >
-              <span>{name}</span>
+              <Link
+                href={`/admin/articles/?tag=${encodeURIComponent(id)}`}
+                className="hover:text-blue-600 dark:hover:text-blue-400"
+              >
+                {name}
+              </Link>
               <Button
                 variant="ghost"
                 size="sm"

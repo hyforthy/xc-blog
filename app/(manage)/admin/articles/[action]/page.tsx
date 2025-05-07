@@ -222,7 +222,7 @@ export default function ArticleEditor({
       /* 加载动画 */
     }
     return (
-      <div className="inset-0 flex justify-center pt-25 h-[calc(100vh-4rem)] bg-white dark:bg-gray-900">
+      <div className="inset-0 flex justify-center pt-25 h-[calc(100vh-4rem)] bg-white dark:bg-gray-900 select-none">
         <div className="relative w-16 h-16">
           <div className="absolute w-full h-full rounded-full border-4 border-blue-100"></div>
           <div className="absolute w-full h-full rounded-full border-4 border-t-transparent border-blue-500 animate-spin"></div>
@@ -276,7 +276,7 @@ export default function ArticleEditor({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* 第一组：标题、分类、标签 */}
-          <div className="space-y-6 p-3 rounded-md dark:shadow-gray-700 shadow-sm">
+          <div className="space-y-6 p-3 rounded-md dark:shadow-gray-700 shadow-sm select-none">
             <div className="space-y-2">
               <Label htmlFor="title">标题</Label>
               <Input

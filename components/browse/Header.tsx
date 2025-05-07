@@ -60,6 +60,9 @@ export default function Header({ theme, setTheme }: HeaderProps) {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
+  // 是否显示关于链接
+  const showAbout = false;
+
   // 控制body滚动
   useEffect(() => {
     if (isMenuOpen) {
@@ -121,14 +124,16 @@ export default function Header({ theme, setTheme }: HeaderProps) {
           <div className="flex items-center">
             <div className="flex items-center space-x-4">
               {/* 关于链接 - 桌面端显示 */}
-              <Link
-                href="/about"
-                title="关于"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center justify-center text-primary dark:text-primary-dark text-xl cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faInfoCircle} />
-              </Link>
+              {showAbout ? (
+                <Link
+                  href="/about"
+                  title="关于"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center justify-center text-primary dark:text-primary-dark text-xl cursor-pointer"
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </Link>
+              ) : null}
 
               <FontAwesomeIcon
                 icon={theme === "light" ? faSun : faMoon}

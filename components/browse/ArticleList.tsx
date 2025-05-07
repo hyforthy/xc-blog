@@ -36,15 +36,23 @@ export default function ArticleList({
           )}
           <article className="space-y-4">
             <div className="space-y-2">
-              <h2 className="text-primary dark:text-primary-dark font-bold text-lg md:text-xl leading-tight transition-colors">
-                {article.title}
-              </h2>
-              {/* 添加分类信息显示 */}
+              <Link href={`/articles/${article.id}`}>
+                <h2 className="text-primary dark:text-primary-dark font-bold text-lg md:text-xl leading-tight transition-colors hover:text-blue-600 dark:hover:text-blue-400">
+                  {article.title}
+                </h2>
+              </Link>
+              {/* 添加可点击的分类信息 */}
               {article.category && (
-                <div className="text-sm">
-                  <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-md">
-                    {article.category}
-                  </span>
+                <div className="mt-1.5">
+                  <Link
+                    href={`/?category=${encodeURIComponent(
+                      article.categoryId
+                    )}`}
+                  >
+                    <span className="text-sm px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-md hover:bg-blue-200 dark:hover:bg-blue-800 cursor-pointer inline-block">
+                      {article.category}
+                    </span>
+                  </Link>
                 </div>
               )}
             </div>
@@ -53,14 +61,19 @@ export default function ArticleList({
             </p>
             <div className="mt-4 text-sm text-secondary dark:text-secondary-dark">
               <div className="space-x-2">
-                {article.tags.map((tag, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2 py-1 bg-neutral-200 dark:bg-neutral-800 rounded text-xs"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                {article.tags &&
+                  article.tags.map((tag, idx) => (
+                    <Link
+                      key={idx}
+                      href={`/?tag=${encodeURIComponent(
+                        article.tagsId?.[idx] || ""
+                      )}`}
+                    >
+                      <span className="px-2 py-1 bg-neutral-200 dark:bg-neutral-800 rounded text-xs hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer inline-block">
+                        {tag}
+                      </span>
+                    </Link>
+                  ))}
               </div>
               <div className="flex justify-between mt-4 items-center">
                 <span>{formatDate(article.updatedAt)}</span>

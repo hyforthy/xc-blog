@@ -57,6 +57,7 @@ export function getArticles(page = 1, categoryId?: string, tagId?: string) {
     title: article.title,
     createdAt: article.created_at, // snake_case → camelCase
     updatedAt: article.updated_at,
+    categoryId: article.category_id,
     category: article.category_name,
     summary: article.summary,
     content: article.content,
@@ -76,21 +77,28 @@ export function getArticles(page = 1, categoryId?: string, tagId?: string) {
   const allArticleTags = articleIds.length > 0 ? 
     db.prepare(
       `SELECT at.article_id, at.tag_id, t.name FROM article_tags at JOIN tags t ON at.tag_id = t.id WHERE at.article_id IN (${articleIds.map(() => '?').join(',')})`
-    ).all(...articleIds) as {article_id: string, name: string}[] : [];
+    ).all(...articleIds) as {article_id: string, tag_id: string, name: string}[] : [];
 
   // 按文章ID分组标签
-  const tagsByArticleId = allArticleTags.reduce((acc, {article_id, name}) => {
-    if (!acc[article_id]) acc[article_id] = [];
-    acc[article_id].push(name);
+  const tagsByArticleId = allArticleTags.reduce((acc, {article_id, tag_id, name}) => {
+    if (!acc[article_id]) acc[article_id] = {tagId: [], tagName:[]};
+    acc[article_id]["tagId"].push(tag_id);
+    acc[article_id]["tagName"].push(name);
     return acc;
-  }, {} as Record<string, string[]>);
+  }, {} as Record<string, Record<string, string[]>>);
 
   // 构建最终结果
-  const articlesWithTags = formattedArticles.map(article => ({
-    ...article,
-    content:"",
-    tags: tagsByArticleId[article.id] || []
-  }));
+  const articlesWithTags = formattedArticles.map(article => {
+    // 检查文章是否有关联的标签数据
+    const articleTags = tagsByArticleId[article.id] || {tagId: [], tagName: []};
+    
+    return {
+      ...article,
+      content:"",
+      tagsId: articleTags.tagId || [],
+      tags: articleTags.tagName || []
+    };
+  });
 
   return {
     articles: articlesWithTags,
@@ -114,7 +122,9 @@ export async function getArticleForRead(id: string) {
     title: article.title,
     createdAt: article.createdAt,
     updatedAt: article.updatedAt,
+    tagsId: article.tagsId,
     tags: article.tagsName,
+    categoryId: article.categoryId,
     category: article.categoryName,
     content: contentHtml,
   };
@@ -266,7 +276,9 @@ export interface Article {
   title: string
   createdAt: string
   updatedAt: string
+  categoryId: string
   category: string
+  tagsId: string[]
   tags: string[]
   summary?: string
   content?: string

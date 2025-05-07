@@ -12,7 +12,7 @@ export default function TagNav({ tags }: TagNavProps) {
   const currentTagId = searchParams.get("tag");
 
   return (
-    <nav className="overflow-x-auto">
+    <nav className="overflow-x-auto scrollbar-none md:scrollbar-thin">
       <div className="flex space-x-2 pb-1">
         {/* 全部文章链接 */}
         <Link
