@@ -29,7 +29,7 @@ export default async function ArticlePage({
         {article.category && (
           <div className="text-center text-sm">
             <Link
-              href={`/?categoryId=${encodeURIComponent(
+              href={`/?category=${encodeURIComponent(
                 article.categoryId || ""
               )}`}
             >
@@ -53,7 +53,7 @@ export default async function ArticlePage({
           {article.tags?.map((tag, index) => (
             <Link
               key={tag}
-              href={`/?tagId=${encodeURIComponent(
+              href={`/?tag=${encodeURIComponent(
                 article.tagsId?.[index] || ""
               )}`}
             >
