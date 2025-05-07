@@ -29,7 +29,7 @@ export default async function Home({
 
   return (
     <div className="space-y-8">
-      <div className="bg-gray-50 dark:bg-gray-900 py-2 shadow-sm -mt-2 rounded-sm">
+      <div className="bg-gray-50 dark:bg-gray-900 pt-1 -mt-2 rounded-sm">
         <div className="max-w-4xl mx-auto px-2 overflow-hidden">
           <TagNav tags={tagList} />
         </div>
